@@ -1,14 +1,18 @@
 import re
 
 MODELES = [
-    "(ignore|disregard|forget|skip) (all )?(the )?(previous|prior|earlier) instructions",
-    "(oubliez|ignorez) (toutes )?(les )?instructions pr[eé]c[eé]dentes",
-    "you are now (a|an) (assistant|ai|chatbot|bot|h[au]cker|pirate)",
-    "(vous [ée]tes|tu es) maintenant (un|une) (assistant|ia|chatbot|bot|h[au]cker|pirate)",
-    "without (any )?(restrictions|limits|rules)",
-    "sans (aucune?)?(restrictions|limites|r[ée]gles?)",
-    "(answer|resp[eo]nd|act|behave) without (any )?(restrictions|limits|rules)",
+    r"(ignore|disregard|forget|skip) (all )?(the )?(previous|prior|earlier) instructions",
+    r"(oubliez|ignorez) (toutes )?(les )?instructions pr[eé]c[eé]dentes",
+    r"you are now (a|an) (assistant|ai|chatbot|bot|h[au]cker|pirate)",
+    r"(vous [éêe]tes|tu es) maintenant (un|une) (assistant|ia|chatbot|bot|h[au]cker|pirate)",
+    r"without (any )?(restrictions|limits|rules)",
+    r"sans (aucune? )?(restrictions?|limites?|r[eéè]gles?)",
+    r"(answer|resp[eo]nd|act|behave) without (any )?(restrictions|limits|rules)",
     r"(\[SYSTEM\]|<system>|### ?System:)",
+    r"(reveal|show|print|repeat|display) your (hidden |initial |original )?(system prompt|instructions)",
+    r"(print|repeat|reveal|show|display) the (hidden |initial |original )?(system prompt|instructions you (received|were given))",
+    r"(affiche[zr]?|montre[zr]?|r[eéè]v[eéè]le[zr]?|r[eéè]p[eéè]te[zr]?) (vos|tes) (instructions|consignes)",
+    r"(affiche[zr]?|montre[zr]?|r[eéè]v[eéè]le[zr]?|r[eéè]p[eéè]te[zr]?) (les )?(instructions|consignes) que (vous|tu) (recevez|re[cç]ois|avez re[cç]ues?|as re[cç]ues?)",
 
 ]
 

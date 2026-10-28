@@ -10,6 +10,7 @@ def load_dataset(path):
 
 DATASET = load_dataset("dataset.csv")
 tp =tn = fp = fn = 0
+
 for text, label in DATASET :
     prediction = is_attack(text)
     if prediction and label == 1 :
