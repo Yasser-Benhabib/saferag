@@ -1,12 +1,5 @@
 from detector import is_attack
-import csv
-
-def load_dataset(path):
-    rows=[]
-    with open(path,encoding="utf-8")  as f :
-        for row in csv.DictReader(f) : 
-            rows.append((row["text"], int(row["label"])))
-    return rows
+from data import load_dataset
 
 DATASET = load_dataset("dataset.csv")
 tp =tn = fp = fn = 0

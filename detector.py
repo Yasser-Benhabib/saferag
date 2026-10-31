@@ -15,16 +15,14 @@ MODELES = [
     r"(affiche[zr]?|montre[zr]?|r[eéè]v[eéè]le[zr]?|r[eéè]p[eéè]te[zr]?) (les )?(instructions|consignes) que (vous|tu) (recevez|re[cç]ois|avez re[cç]ues?|as re[cç]ues?)",
 
 ]
-
-
-
-
 def is_attack(text) : 
     for modele in MODELES : 
         if re.search(modele,text,re.IGNORECASE) : 
             return True
         
     return False
+
+
 
 if __name__ == "__main__" :
     tests =[
