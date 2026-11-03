@@ -5,3 +5,6 @@ def load_dataset(path) :
         for row in csv.DictReader(f) :
             rows.append((row["text"],int(row["label"])))
     return rows
+    
+    
+    
