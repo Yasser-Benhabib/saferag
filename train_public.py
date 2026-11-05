@@ -32,3 +32,21 @@ coefs = sorted(zip(model.coef_[0],vectorizer.get_feature_names_out()))
 print("Mots vers 'attaque' :",[mot for c,mot, in coefs[-15:]])
 print("Mots vers 'normal' :", [mot for c, mot in coefs[:10]])
 
+####################################################
+mes_docs = load_dataset("dataset.csv")
+X_mes = [i for i,j in mes_docs]
+y_mes = [j for i,j in mes_docs]
+
+predictions_mes = model.predict(vectorizer.transform(X_mes))
+tn,fp,fn,tp = confusion_matrix(y_mes,predictions_mes).ravel()
+print("\n--- Evaluation sur mes 57 documents ---")
+print("TP:", tp, "FP:", fp, "TN:", tn, "FN:", fn)
+print("Rappel : ",round(recall_score(y_mes,predictions_mes),2))
+print("Précision : ", round(precision_score(y_mes, predictions_mes), 2))
+
+print("\n---Les erreurs---")
+for text,label,pred in zip(X_mes,y_mes,predictions_mes) : 
+    if label == 1 and pred ==0 : 
+        print("Attaque raté:",text)
+    elif label == 0 and pred == 1 :
+        print("Fausse alerte:",text)
