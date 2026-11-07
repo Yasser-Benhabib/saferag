@@ -125,4 +125,34 @@ lisent toute la phrase et comprennent chaque mot dans son contexte.
   - les textes qui citent une attaque pour l'expliquer, comme ma formation sécurité,
     qui déclenchent une fausse alerte chez tous.
 
+### Seuil de décision et combinaison
+
+Un modèle ne répond pas seulement « attaque » ou « normal » : il calcule une probabilité d'attaque
+entre 0 et 1, et dit « attaque » au-dessus de 0.5. En baissant ce seuil, on attrape plus d'attaques
+mais on déclenche plus de fausses alertes ; en le montant, c'est l'inverse.
+
+Pour choisir le seuil honnêtement, j'utilise trois groupes de textes :
+- **validation** (les 546 textes d'entraînement du jeu public) : pour choisir le seuil ;
+- **test public** (116 textes) et **mes documents** (57 textes) : pour mesurer le résultat,
+  sans jamais m'en servir pour choisir.
+
+`calculer_scores.py` calcule une seule fois les probabilités des deux modèles sur ces trois groupes
+et les enregistre dans `scores/` (non inclus dans le dépôt). Les seuils se testent ensuite instantanément.
+
+#### Effet du seuil
+
+Seuil choisi sur la validation (meilleur F1 parmi 0.9, 0.5, 0.2, 0.1, 0.05, 0.01 et 0.001) :
+0.001 pour les deux modèles.
+
+| Modèle | Seuil | Test public : rappel / précision | Mes documents : rappel / précision |
+|---|---|---|---|
+| ProtectAI | 0.5 | 0.37 / 1.00 | 0.87 / 0.65 |
+| ProtectAI | 0.001 | 0.50 / 1.00 | 0.90 / 0.63 |
+| Prompt Guard 2 | 0.5 | 0.13 / 1.00 | 0.57 / 0.85 |
+| Prompt Guard 2 | 0.001 | 0.63 / 0.93 | 0.93 / 0.70 |
+
+Avec un seuil très bas, Prompt Guard 2 attrape 28 de mes 30 attaques au lieu de 17,
+mais déclenche 12 fausses alertes au lieu de 3. Sur le test public, il passe de 13 % à 63 %
+d'attaques attrapées : il voyait déjà ces attaques, mais leur donnait des scores très faibles.
+
 Les données publiques ne sont pas incluses dans ce dépôt : `download_public.py` les télécharge.
