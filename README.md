@@ -267,3 +267,30 @@ Ce que ce test montre :
 
 Pour être lue par le LLM, une injection doit donc ressembler aux questions des utilisateurs.
 C'est la technique utilisée plus bas pour empoisonner un document.
+
+### Découpage et recherche
+
+La base de test contient 4 documents d'une boutique fictive, Zentra : remboursement, livraison,
+garantie et support. Chaque document est découpé en paragraphes, ce qui donne 17 morceaux.
+Les vecteurs des morceaux sont calculés une seule fois (l'indexation). À chaque question,
+seul le vecteur de la question est calculé, puis comparé aux 17 morceaux : on garde les 3 plus proches.
+
+| Question | 1er morceau retrouvé | Score |
+|----------|----------------------|-------|
+| Combien de jours ai-je pour être remboursé ? | « Le remboursement est versé sous 7 jours ouvrés… » | 0.68 |
+| Is shipping free? | « La livraison standard… Elle est gratuite à partir de 60 euros d'achat. » | 0.54 |
+| Vendez-vous des téléphones pliables ? (Zentra n'en vend pas) | « Garantie des produits Zentra », un titre | 0.32 |
+
+Ce que ce test montre :
+
+- La recherche marche entre deux langues : la question en anglais retrouve le bon paragraphe en français.
+- Pour la première question, le paragraphe qui répond (« Vous avez 30 jours… ») n'est que 2e (0.58).
+  Le 1er dit quand l'argent arrive : les deux parlent de jours et de remboursement.
+  C'est pour ça que le chatbot donne 3 morceaux au LLM, et pas seulement le premier.
+- Un titre seul ne contient aucune information, mais il peut être retrouvé :
+  « Garantie des produits Zentra » arrive en tête pour la question hors sujet.
+- La recherche renvoie toujours 3 morceaux, même quand aucun ne répond. Les meilleurs scores
+  des vraies questions (0.68 et 0.54) sont loin de celui de la question hors sujet (0.32).
+  Le chatbot utilisera donc un seuil minimum de 0.4 : un morceau en dessous n'est pas donné au LLM,
+  et si aucun morceau ne passe, le chatbot répond qu'il ne sait pas au lieu d'inventer.
+  Avec 3 questions seulement, ce seuil reste une première estimation.
