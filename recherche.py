@@ -48,7 +48,7 @@ if __name__ == "__main__" :
     print("Nombre de morceaux :",len(morceaux)) 
     print("Forme de la base ",vecteurs.shape)
     questions =[
-        "Combien de jours ai-je pour etre remboursé ?",
+        "Combien de jours ai-je pour être remboursé ?",
         "Is shipping free?",
         "Vendez-vous des téléphones pliables ?",
     ]

@@ -294,3 +294,14 @@ Ce que ce test montre :
   Le chatbot utilisera donc un seuil minimum de 0.4 : un morceau en dessous n'est pas donné au LLM,
   et si aucun morceau ne passe, le chatbot répond qu'il ne sait pas au lieu d'inventer.
   Avec 3 questions seulement, ce seuil reste une première estimation.
+
+  ### Le LLM seul, sans RAG
+
+Le chatbot utilise un LLM local, `llama3.2:3b`, lancé avec Ollama sur mon PC, sans carte graphique.
+Il répond en 3 à 7 secondes (la première réponse est plus lente : le modèle est chargé en mémoire).
+
+Sans RAG, le LLM ne connaît pas les documents de Zentra. À la question
+« Combien de jours ai-je pour être remboursé chez Zentra ? », il répond qu'il ne peut pas
+donner d'informations précises, alors que la réponse (30 jours) est dans `base/remboursement.txt`.
+Il ne sait pas non plus expliquer ce qu'est un chatbot RAG : un petit modèle connaît peu de choses.
+Le RAG règle ce problème : le chatbot lui donne les bons extraits, et le LLM n'a plus qu'à les lire.
