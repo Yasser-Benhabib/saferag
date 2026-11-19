@@ -318,6 +318,7 @@ Le chatbot assemble la recherche et le LLM. Pour chaque question :
 | Question | Réponse du chatbot | Sources |
 |----------|--------------------|---------|
 | Combien de jours ai-je pour être remboursé ? | « Vous avez 30 jours après la livraison pour demander un remboursement. » | garantie.txt, remboursement.txt |
+| Is shipping free? | « Non, les frais de port ne sont pas libres. La livraison standard est gratuite à partir de 60 euros d'achat. » | livraison.txt |
 | Vendez-vous des téléphones pliables ? | « Je ne trouve pas cette information dans nos documents. » (LLM non appelé) | aucune |
 
 Ce que ce test montre :
