@@ -295,7 +295,7 @@ Ce que ce test montre :
   et si aucun morceau ne passe, le chatbot répond qu'il ne sait pas au lieu d'inventer.
   Avec 3 questions seulement, ce seuil reste une première estimation.
 
-  ### Le LLM seul, sans RAG
+### Le LLM seul, sans RAG
 
 Le chatbot utilise un LLM local, `llama3.2:3b`, lancé avec Ollama sur mon PC, sans carte graphique.
 Il répond en 3 à 7 secondes (la première réponse est plus lente : le modèle est chargé en mémoire).
@@ -305,3 +305,30 @@ Sans RAG, le LLM ne connaît pas les documents de Zentra. À la question
 donner d'informations précises, alors que la réponse (30 jours) est dans `base/remboursement.txt`.
 Il ne sait pas non plus expliquer ce qu'est un chatbot RAG : un petit modèle connaît peu de choses.
 Le RAG règle ce problème : le chatbot lui donne les bons extraits, et le LLM n'a plus qu'à les lire.
+
+### Le chatbot complet
+
+Le chatbot assemble la recherche et le LLM. Pour chaque question :
+1. il cherche les 3 morceaux les plus proches ;
+2. il garde seulement ceux dont le score est au moins 0.4 ;
+3. s'il n'en reste aucun, il répond « Je ne trouve pas cette information dans nos documents. »
+   sans appeler le LLM ;
+4. sinon, il place les extraits dans le message system, avec les consignes, et le LLM rédige la réponse.
+
+| Question | Réponse du chatbot | Sources |
+|----------|--------------------|---------|
+| Combien de jours ai-je pour être remboursé ? | « Vous avez 30 jours après la livraison pour demander un remboursement. » | garantie.txt, remboursement.txt |
+| Vendez-vous des téléphones pliables ? | « Je ne trouve pas cette information dans nos documents. » (LLM non appelé) | aucune |
+
+Ce que ce test montre :
+
+- Le même LLM qui ne savait pas répondre sans RAG donne maintenant la bonne réponse.
+  La seule différence, ce sont les extraits.
+- Le LLM choisit le bon extrait : il donne le délai pour demander (30 jours) et laisse de côté
+  le délai de versement (7 jours), qui avait pourtant le meilleur score.
+- Les sources sont les fichiers de tous les extraits lus par le LLM, pas seulement ceux qu'il a utilisés :
+  `garantie.txt` apparaît alors que la réponse n'en vient pas.
+- Pour la question hors sujet, aucun morceau ne passe le seuil : le chatbot répond tout de suite,
+  sans risque d'inventer.
+- Les extraits sont placés dans le message system, à côté des vraies consignes.
+  Un morceau malveillant arriverait au même endroit : c'est pour ça que SafeRAG doit agir avant l'indexation.
